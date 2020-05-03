@@ -21,7 +21,7 @@ Support seraph via paypal donations, thanks in advance !
   - Add item to user designated `bank page` of bank list
 - __`set`__
   - __`delay <num>`__
-    - Set delay between items banked to <num> ms
+    - Set delay between items banked to `num` ms
 - __`list`__
   - Export bank list to console
 - __`rm <chatLink | id>`__
