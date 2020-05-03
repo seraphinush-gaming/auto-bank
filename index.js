@@ -10,7 +10,7 @@ class auto_banker {
     // init
     this.can_bank = false;
     this.do_bank = false;
-    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 3: [] };
+    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
 
     // command
     mod.command.add('bank', {
@@ -114,7 +114,7 @@ class auto_banker {
   // listener
   _listener() {
     if (!this.do_bank) {
-      this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 3: [] };
+      this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
 
       for (let page in this.mod.settings.bank_list) {
         this.mod.game.inventory.findAllInBag(this.mod.settings.bank_list[page]).forEach((item) => {
@@ -143,7 +143,7 @@ class auto_banker {
       }
     }
 
-    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 3: [] };
+    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
     this.can_bank = this.do_bank = false;
   }
 
