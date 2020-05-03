@@ -18,7 +18,7 @@ Support seraph via paypal donations, thanks in advance !
   - Toggle on/off
 ### Arguments
 - __`add <bank page> <chatLink | id>`__
-  - Add item to <bank page> of bank list
+  - Add item to user designated `bank page` of bank list
 - __`set`__
   - __`delay <num>`__
     - Set delay between items banked to <num> ms
