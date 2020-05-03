@@ -28,7 +28,8 @@ Support seraph via paypal donations, thanks in advance !
   - Remove item from bank list
 
 ## Info
-- Inventory support only, does not search for items in pocket to bank
+- [Demo](https://streamable.com/zs550j)
+- Inventory support only, does not search for items in pocket to store in bank
 - Bank support only, does not automatically store items into guild bank, pet storage, or wardrobe
 - In case of duplicates within a page, automatically resolves on logging out of the game
 - In case of duplicates across several pages, user will have to remove them one by one and add to bank list again
