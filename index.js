@@ -8,7 +8,6 @@ class auto_banker {
     this.command = mod.command;
 
     // init
-    this.can_bank = false;
     this.do_bank = false;
     this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
 
@@ -89,16 +88,15 @@ class auto_banker {
     // code
     mod.hook('S_REQUEST_CONTRACT', 1, { order: 10 }, (e) => {
       if (mod.settings.enable && e.senderId == mod.game.me.gameId && e.type == 26) {
-        this.can_bank = true;
+        mod.hookOnce('S_VIEW_WARE_EX', 2, { order: -10 }, (e) => {
+          if (!this.do_bank && e.gameId == mod.game.me.gameId && e.container == 1) {
+            this.do_bank = true;
+            this.handle_bank();
+          }
+        });
       }
     });
 
-    mod.hook('S_VIEW_WARE_EX', 2, { order: -10 }, (e) => {
-      if (this.can_bank && !this.do_bank && e.gameId == mod.game.me.gameId && e.container == 1) {
-        this.do_bank = true;
-        this.handle_bank();
-      }
-    });
   }
 
   destructor() {
@@ -144,7 +142,7 @@ class auto_banker {
     }
 
     this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
-    this.can_bank = this.do_bank = false;
+    this.do_bank = false;
   }
 
   // helper
