@@ -2,8 +2,8 @@
 
 const DefaultSettings = {
   "enable": false,
-  "bank_list": { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] },
-  "bank_delay": 150
+  "delay": 150,
+  "bank_list": { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] }
 };
 
 function MigrateSettings(from_ver, to_ver, settings) {
@@ -19,7 +19,10 @@ function MigrateSettings(from_ver, to_ver, settings) {
       return MigrateSettings(from_ver + 1, to_ver, settings);
     }
     switch (to_ver) {
-      //
+      case 2:
+        settings.delay = settings.bank_delay;
+        delete settings.bank_delay;
+        break;
     }
 
     return settings;

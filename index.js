@@ -1,5 +1,7 @@
 'use strict';
 
+const regex_id = /#(\d+)@/;
+
 class auto_banker {
 
   constructor(mod) {
@@ -9,7 +11,7 @@ class auto_banker {
 
     // init
     this.do_bank = false;
-    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
+    this.to_bank = {};
 
     // command
     mod.command.add('bank', {
@@ -17,22 +19,20 @@ class auto_banker {
         mod.settings.enable = !mod.settings.enable;
         this.send(`${mod.settings.enable ? 'En' : 'Dis'}abled`);
       },
-      'add': async (page, id) => {
-        if (page && id) {
-          (!isNaN(page = parseInt(page)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
-          mod.settings.bank_list[page].push(id);
-          this.send(`Added &lt;${mod.game.data.items.get(id).name}&gt; to bank page ${page}.`);
+      'add': async (tab, id) => {
+        if (tab && id) {
+          (!isNaN(tab = parseInt(tab)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
+          mod.settings.bank_list[tab].push(id);
+          this.send(`Added &lt;${mod.game.data.items.get(id).name}&gt; to bank tab ${tab}.`);
         }
-        else {
-          this.send(`Invalid argument. usage : bank add &lt;page&gt; &lt;item id | chat link&gt;`);
-        }
+        else { this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`); }
       },
       'list': () => {
         mod.log('Bank list :');
-        for (let page in mod.settings.bank_list) {
-          console.log(`${page}.`);
-          mod.settings.bank_list[page].sort();
-          mod.settings.bank_list[page].forEach((item) => {
+        for (let tab in mod.settings.bank_list) {
+          console.log(`${tab}.`);
+          mod.settings.bank_list[tab].sort();
+          mod.settings.bank_list[tab].forEach((item) => {
             console.log('- ' + item + ' : ' + (mod.game.data.items.get(item) ? mod.game.data.items.get(item).name : 'undefined'));
           });
         }
@@ -42,11 +42,10 @@ class auto_banker {
         if (id) {
           (!isNaN(parseInt(id))) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
           let i = -1;
-          for (let page in mod.settings.bank_list) {
-            mod.settings.bank_list[page].sort();
-            i = mod.settings.bank_list[page].indexOf(id);
+          for (let tab in mod.settings.bank_list) {
+            i = mod.settings.bank_list[tab].indexOf(id);
             if (i >= 0) {
-              mod.settings.bank_list[page].splice(i, 1);
+              mod.settings.bank_list[tab].splice(i, 1);
               this.send(`Item found.`);
               break;
             }
@@ -56,25 +55,16 @@ class auto_banker {
           else
             this.send(`Unable to find &lt;${mod.game.data.items.get(id).name}&gt; in bank list.`);
         }
-        else {
-          this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`);
-        }
+        else { this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`); }
       },
       'set': {
         'delay': (n) => {
           n = parseInt(n);
           if (!isNaN(n)) {
-            if (n >= 80) {
-              mod.settings.bank_delay = n;
-              this.send(`Set delay between items banked to ${n} ms.`);
-            }
-            else {
-              this.send(`Recommended delay between items banked is 80 ms or longer. for risk concerns, please try a value greater than 80 ms.`);
-            }
+            mod.settings.delay = n;
+            this.send(`Set delay between items banked to ${n} ms.`);
           }
-          else {
-            this.send(`Invalid argument. usage : bank set delay <num>`);
-          }
+          else { this.send(`Invalid argument. usage : bank set delay <num>`); }
         },
         '$default': () => { this.send(`Invalid argument. usage : bank set [delay]`); }
       },
@@ -101,8 +91,9 @@ class auto_banker {
 
   destructor() {
     this.command.remove('bank');
-    for (let page in this.mod.settings.bank_list) {
-      this.mod.settings.bank_list[page] = Array.from(new Set(this.mod.settings.bank_list[page]));
+    for (let tab in this.mod.settings.bank_list) {
+      this.mod.settings.bank_list[tab].sort();
+      this.mod.settings.bank_list[tab] = Array.from(new Set(this.mod.settings.bank_list[tab]));
     }
 
     if (this.mod.manager.isLoaded('tera-game-state'))
@@ -112,11 +103,12 @@ class auto_banker {
   // listener
   _listener() {
     if (!this.do_bank) {
-      this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
+      this.to_bank = {};
 
-      for (let page in this.mod.settings.bank_list) {
-        this.mod.game.inventory.findAllInBag(this.mod.settings.bank_list[page]).forEach((item) => {
-          this.to_bank[page].push({ id: item.id, dbid: item.dbid, slot: item.slot, amount: item.amount });
+      for (let tab in this.mod.settings.bank_list) {
+        this.mod.game.inventory.findAllInBag(this.mod.settings.bank_list[tab]).forEach((item) => {
+          if (!this.to_bank[tab]) this.to_bank[tab] = [];
+          this.to_bank[tab].push({ id: item.id, dbid: item.dbid, slot: item.slot, amount: item.amount });
         });
       }
     }
@@ -124,69 +116,58 @@ class auto_banker {
 
   // handler
   async handle_bank() {
-    for (let page in this.to_bank) {
-      if (this.to_bank[page].length > 0) {
-        this.to_bank[page].sort((a, b) => b.slot - a.slot);
-
+    for (let tab in this.to_bank) {
+      if (this.to_bank[tab].length > 0) {
+        this.to_bank[tab].sort((a, b) => b.slot - a.slot);
         this.mod.send('C_VIEW_WARE', 2, {
           gameId: this.mod.game.me.gameId,
           type: 1,
-          offset: (page - 1) * 72
+          offset: (tab - 1) * 72
         });
         await this.sleep(100);
-        for (let item of this.to_bank[page]) {
-          await this.try_bank(page, item);
-        }
+
+        for (let item of this.to_bank[tab])
+          await this.try_bank(tab, item);
+          
         await this.sleep(100);
       }
     }
 
-    this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
+    //this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
+    this.to_bank = {};
     this.do_bank = false;
   }
 
   // helper
   get_chatlink_id(chatlink) {
     return new Promise((resolve) => {
-      let regex_id = /#(\d+)@/;
       let res = chatlink.match(regex_id);
       res = parseInt(res[1]);
       resolve(res);
     });
   }
 
-  try_bank(page, item) {
+  try_bank(tab, item) {
     return new Promise((resolve) => {
       this.mod.setTimeout(() => {
         this.mod.send('C_PUT_WARE_ITEM', 3, {
           gameId: this.mod.game.me.gameId,
           container: 1,
-          offset: (page - 1) * 72,
+          offset: (tab - 1) * 72,
           fromSlot: item.slot,
           id: item.id,
           dbid: item.dbid,
           amount: item.amount,
-          toSlot: (page - 1) * 72
+          toSlot: (tab - 1) * 72
         });
         resolve();
-      }, 50);
+      }, this.mod.settings.delay);
     });
   }
 
-  sleep(ms) {
-    return new Promise((resolve) => {
-      this.mod.setTimeout(() => {
-        resolve();
-      }, ms);
-    });
-  }
+  sleep(ms) { return new Promise((resolve) => { setTimeout(resolve, ms); }); }
 
   send(msg) { this.command.message(': ' + msg); }
-
-  // reload
-  saveState() { }
-
-  loadState() { }
 
 }
 

@@ -4,8 +4,8 @@
 </a>
 </p>
 
-# auto-banker [![paypal](https://img.shields.io/badge/paypal-donate-333333.svg?colorA=253B80&colorB=333333)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B7QQJZV9L5P2J&source=url) [![paypal.me](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=169BD7&colorB=333333)](https://www.paypal.me/seraphinush)
-tera-toolbox module to automatically stored items from inventory to bank
+# auto-banker [![paypal.me](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=253B80&colorB=333333)](https://www.paypal.me/seraphinush)
+tera-toolbox module to automatically store whitelisted items from inventory to bank 
 ```
 Support seraph via paypal donations, thanks in advance !
 ```
@@ -17,8 +17,8 @@ Support seraph via paypal donations, thanks in advance !
 - __`bank`__
   - Toggle on/off
 ### Arguments
-- __`add <bank page> <chatLink | id>`__
-  - Add item to user designated `bank page` of bank list
+- __`add <bank tab> <chatLink | id>`__
+  - Add item to user designated `bank tab` of bank list
 - __`set`__
   - __`delay <num>`__
     - Set delay between items banked to `num` ms
@@ -31,8 +31,8 @@ Support seraph via paypal donations, thanks in advance !
 - [Demo](https://streamable.com/zs550j)
 - Inventory support only, does not search for items in pocket to store in bank
 - Bank support only, does not automatically store items into guild bank, pet storage, or wardrobe
-- In case of duplicates within a page, automatically resolves on logging out of the game
-- In case of duplicates across several pages, user will have to remove them one by one and add to bank list again
+- In case of duplicates within a tab, automatically resolves on logging out of the game
+- In case of duplicates across several tabs, user will have to remove them one by one and add to bank list again
 
 ## Changelog
 <details>

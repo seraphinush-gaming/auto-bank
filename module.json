@@ -1,16 +1,16 @@
 {
   "author": "seraphinush",
-  "description": "tera-toolbox module to automatically stored items from inventory to bank",
+  "description": "tera-toolbox module to automatically store whitelisted items from inventory to bank",
   "disableAutoUpdate": false,
-  "donationUrl": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=B7QQJZV9L5P2J&source=url",
+  "donationUrl": "https://www.paypal.me/seraphinush",
   "name": "auto-banker",
   "options": {
     "reloadable": true,
-    "settingsVersion": 1,
+    "settingsVersion": 2,
     "settingsFile": "config.json",
     "settingsMigrator": "settings.js"
   },
   "servers": ["https://raw.githubusercontent.com/seraphinush-gaming/auto-banker/master/"],
   "supportUrl": "https://github.com/seraphinush-gaming/auto-banker/blob/master/README.md",
-  "version": "1.00.06"
+  "version": "1.00.07.v95.04"
 }
