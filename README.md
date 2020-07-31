@@ -8,7 +8,7 @@
 Support seraph via paypal donations, thanks in advance !
 ```
 
-# auto-banker [![paypal](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush)
+# auto-banker [![](https://img.shields.io/badge/paypal-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush)
 tera-toolbox module to automatically store whitelisted items from inventory to bank 
 
 ## Auto-update guide
