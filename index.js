@@ -168,4 +168,4 @@ class auto_banker {
 
 }
 
-module.exports = auto_banker;
+module.exports = { NetworkMod: auto_banker };

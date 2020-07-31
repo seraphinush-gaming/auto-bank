@@ -4,11 +4,12 @@
 </a>
 </p>
 
-# auto-banker [![paypal](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush)
-tera-toolbox module to automatically store whitelisted items from inventory to bank 
 ```
 Support seraph via paypal donations, thanks in advance !
 ```
+
+# auto-banker [![paypal](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush)
+tera-toolbox module to automatically store whitelisted items from inventory to bank 
 
 ## Auto-update guide
 - Create a folder called `auto-banker` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/seraphinush-gaming/auto-banker/master/module.json) << (right-click this link and save as..) into the folder
