@@ -47,13 +47,11 @@ class auto_banker {
             if (i >= 0) {
               mod.settings.bank_list[tab].splice(i, 1);
               this.send(`Item found.`);
-              break;
+              this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
+              return;
             }
           }
-          if (i >= 0)
-            this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
-          else
-            this.send(`Unable to find &lt;${mod.game.data.items.get(id).name}&gt; in bank list.`);
+          this.send(`Unable to find &lt;${mod.game.data.items.get(id).name}&gt; in bank list.`);
         }
         else { this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`); }
       },
@@ -133,7 +131,6 @@ class auto_banker {
       }
     }
 
-    //this.to_bank = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] };
     this.to_bank = {};
     this.do_bank = false;
   }

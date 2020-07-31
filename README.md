@@ -4,7 +4,7 @@
 </a>
 </p>
 
-# auto-banker [![paypal.me](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=253B80&colorB=333333)](https://www.paypal.me/seraphinush)
+# auto-banker [![paypal](https://img.shields.io/badge/paypal.me-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush)
 tera-toolbox module to automatically store whitelisted items from inventory to bank 
 ```
 Support seraph via paypal donations, thanks in advance !
@@ -30,9 +30,9 @@ Support seraph via paypal donations, thanks in advance !
 ## Info
 - [Demo](https://streamable.com/zs550j)
 - Inventory support only, does not search for items in pocket to store in bank
-- Bank support only, does not automatically store items into guild bank, pet storage, or wardrobe
-- In case of duplicates within a tab, automatically resolves on logging out of the game
-- In case of duplicates across several tabs, user will have to remove them one by one and add to bank list again
+- Bank storage support only, does not automatically store items into guild bank, pet storage, or wardrobe
+- In case of duplicates added within a tab, automatically resolves on logging out of the game
+- In case of duplicates across several tabs, user will have to remove them individually and add to bank tab again
 
 ## Changelog
 <details>
