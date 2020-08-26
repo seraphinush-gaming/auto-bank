@@ -44,14 +44,9 @@ class auto_banker {
           let i = -1;
           for (let tab in mod.settings.bank_list) {
             i = mod.settings.bank_list[tab].indexOf(id);
-            if (i >= 0) {
-              mod.settings.bank_list[tab].splice(i, 1);
-              this.send(`Item found.`);
-              this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
-              return;
-            }
+            i >= 0 ? mod.settings.bank_list[tab].splice(i, 1) : null;
           }
-          this.send(`Unable to find &lt;${mod.game.data.items.get(id).name}&gt; in bank list.`);
+          this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
         }
         else { this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`); }
       },
