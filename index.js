@@ -25,13 +25,13 @@ class auto_banker {
           mod.settings.bank_list[tab].push(id);
           this.send(`Added &lt;${mod.game.data.items.get(id).name}&gt; to bank tab ${tab}.`);
         }
-        else { this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`); }
+        else this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`)
       },
       'list': () => {
         mod.log('Bank list :');
         for (let tab in mod.settings.bank_list) {
           console.log(`${tab}.`);
-          mod.settings.bank_list[tab].sort();
+          mod.settings.bank_list[tab].sort((a, b) => parseInt(a) - parseInt(b));
           mod.settings.bank_list[tab].forEach((item) => {
             console.log('- ' + item + ' : ' + (mod.game.data.items.get(item) ? mod.game.data.items.get(item).name : 'undefined'));
           });
@@ -48,20 +48,20 @@ class auto_banker {
           }
           this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
         }
-        else { this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`); }
+        else this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`)
       },
       'set': {
-        'delay': (n) => {
-          n = parseInt(n);
-          if (!isNaN(n)) {
-            mod.settings.delay = n;
-            this.send(`Set delay between items banked to ${n} ms.`);
+        'delay': (num) => {
+          if (!isNaN(num = parseInt(num))) {
+            mod.settings.delay = num;
+            this.send(`Set delay between items banked to ${num} ms.`);
           }
           else { this.send(`Invalid argument. usage : bank set delay <num>`); }
         },
-        '$default': () => { this.send(`Invalid argument. usage : bank set [delay]`); }
+        '$default': () => this.send(`Invalid argument. usage : bank set [delay]`)
       },
-      '$default': () => { this.send(`Invalid argument. usage : bank [add|list|rm|set]`); }
+      'usage': () => this.send(`Usage : bank [add|list|rm|set]`),
+      '$default': () => this.send(`Invalid argument. usage : bank [add|list|rm|set|usage]`)
     });
 
     // inventory

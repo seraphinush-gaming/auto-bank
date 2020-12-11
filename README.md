@@ -21,6 +21,8 @@ tera-toolbox module to automatically store whitelisted items from inventory to b
   - Export bank list to console
 - __`rm <chatLink | id>`__
   - Remove item from bank list
+- __`usage`__
+  - Send command and arguments to chat
 
 ## Info
 - [Demo](https://streamable.com/zs550j)
@@ -30,6 +32,8 @@ tera-toolbox module to automatically store whitelisted items from inventory to b
 ## Changelog
 <details>
 
+    1.01
+    - Added `usage` option
     1.00
     - Initial online commit
 

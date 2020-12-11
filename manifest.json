@@ -1,14 +1,8 @@
 {
-	"files": {
-		"README.md": "7b0cb93d543a888e2d758c62931e004d6866e05673fff5526e65bcdc1f096733",
-		"index.js": "228970b22e75f7ada0e13d900115a8c72a01e61489240c73b901e5677d23ff39",
-		"module.json": "75538ebc2abf3316c402f05bf6faf7778bc4a9a8c030d4f0ce2dd5e172e0754c",
-		"settings.js": "89ddfc76a6770b45737775a5e7138feaff91f31dc0e08df83dba6c89d4c7765e"
-	},
-	"defs": {
-		"C_PUT_WARE_ITEM": 3,
-		"C_VIEW_WARE": 2,
-		"S_REQUEST_CONTRACT": 1,
-		"S_VIEW_WARE_EX": [2,3]
-	}
+  "files": {
+    "README.md": "19fbd35b7c97aa8c4cafa72d6ab14ade521427d3a6d5539c7ded54a17c50ec65",
+    "index.js": "5d76e181ec7763bc52e2df0461a38cb99f9e1e3cc43158595ec725e35a21a76e",
+    "module.json": "4f47b8a6c91d688b55b2d5f521dc0cedac67989496c7e42e8e5f9af868905c7e",
+    "settings.js": "89ddfc76a6770b45737775a5e7138feaff91f31dc0e08df83dba6c89d4c7765e"
+  }
 }
