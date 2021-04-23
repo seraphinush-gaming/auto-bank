@@ -105,7 +105,7 @@ class auto_banker {
   destructor() {
     this.command.remove('bank');
     for (let tab in this.mod.settings.bank_list) {
-      mod.settings.bank_list[tab].sort((a, b) => parseInt(a) - parseInt(b));
+      this.mod.settings.bank_list[tab].sort((a, b) => parseInt(a) - parseInt(b));
       this.mod.settings.bank_list[tab] = Array.from(new Set(this.mod.settings.bank_list[tab]));
     }
 
