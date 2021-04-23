@@ -20,15 +20,16 @@ class auto_banker {
         this.send(`${mod.settings.enable ? 'En' : 'Dis'}abled`);
       },
       'add': async (tab, id) => {
-        if (tab && id) {
-          (!isNaN(tab = parseInt(tab)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
-          if (!mod.game.data.items.get(id))
-            return this.send(`Invalid id. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
-          mod.settings.bank_list[tab].push(id);
-          let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
-          this.send(`Added &lt;${name}&gt; to bank tab ${tab}.`);
-        }
-        else this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
+        if (!tab || !id)
+          return this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
+
+        (!isNaN(tab = parseInt(tab)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
+        if (!mod.game.data.items.get(id))
+          return this.send(`Invalid id. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
+
+        mod.settings.bank_list[tab].push(id);
+        let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
+        this.send(`Added &lt;${name}&gt; to bank tab ${tab}.`);
       },
       'gold': () => {
         mod.settings.deposit_gold = !mod.settings.deposit_gold;
@@ -48,37 +49,37 @@ class auto_banker {
         this.send(`Exported bank list to console.`);
       },
       'rm': async (id) => {
-        if (id) {
-          (!isNaN(parseInt(id))) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
-          let i = -1;
-          for (let tab in mod.settings.bank_list) {
-            i = mod.settings.bank_list[tab].indexOf(id);
-            i >= 0 ? mod.settings.bank_list[tab].splice(i, 1) : null;
-          }
-          let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
-          this.send(`Removed &lt;${name}&gt; from bank list.`);
+        if (!id)
+          return this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`);
+
+        (!isNaN(parseInt(id))) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
+        let i = -1;
+        for (let tab in mod.settings.bank_list) {
+          i = mod.settings.bank_list[tab].indexOf(id);
+          i >= 0 ? mod.settings.bank_list[tab].splice(i, 1) : null;
         }
-        else this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`);
+        let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
+        this.send(`Removed &lt;${name}&gt; from bank list.`);
       },
       'set': {
         'delay': (num) => {
-          if (!isNaN(num = parseInt(num))) {
-            mod.settings.delay = num;
-            this.send(`Set delay between items banked to ${num} ms.`);
-          }
-          else { this.send(`Invalid argument. usage : bank set delay &lt;num&gt;`); }
+          if (isNaN(num = parseInt(num)))
+            return this.send(`Invalid argument. usage : bank set delay &lt;num&gt;`);
+
+          mod.settings.delay = num;
+          this.send(`Set delay between items banked to ${num} ms.`);
         },
         'gold': (num) => {
-          if (!isNaN(num = parseInt(num))) {
-            mod.settings.deposit_amount = num * 10000;
-            this.send(`Set auto-deposit to keep ${num} Gold in Inventory.`);
-          }
-          else this.send(`Invalid argument. usage : bank set gold &lt;num&gt;`);
+          if (!isNaN(num = parseInt(num)))
+            return this.send(`Invalid argument. usage : bank set gold &lt;num&gt;`);
+
+          mod.settings.deposit_amount = num * 10000;
+          this.send(`Set auto-deposit to keep ${num} Gold in Inventory.`);
         },
         '$default': () => this.send(`Invalid argument. usage : bank set [delay|gold]`)
       },
-      'usage': () => this.send(`Usage : bank [add|gold|list|rm|set]`),
-      '$default': () => this.send(`Invalid argument. usage : bank [add|gold|list|rm|set|usage]`)
+      '?': () => this.send(`Usage : bank [add|gold|list|rm|set]`),
+      '$default': () => this.send(`Invalid argument. usage : bank [add|gold|list|rm|set|?]`)
     });
 
     // inventory

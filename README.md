@@ -26,7 +26,7 @@ tera-toolbox module to automatically store gold and whitelisted items from inven
   - `gold <num>`
     - Set auto-deposit to keep `num` Gold in Inventory
     - Requires auto-deposit to `true`
-- `usage`
+- `?`
   - Send command and arguments to chat
 
 ## Info
@@ -37,6 +37,8 @@ tera-toolbox module to automatically store gold and whitelisted items from inven
 ## Changelog
 <details>
 
+    1.03
+    - Changed `usage` option to `?` option
     1.02
     - Added `gold` option
     1.01
