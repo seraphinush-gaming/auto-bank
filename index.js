@@ -2,7 +2,7 @@
 
 const regex_id = /#(\d+)@/;
 
-class auto_banker {
+class auto_bank {
 
   constructor(mod) {
 
@@ -198,4 +198,4 @@ class auto_banker {
 
 }
 
-module.exports = { NetworkMod: auto_banker };
+module.exports = { NetworkMod: auto_bank };
