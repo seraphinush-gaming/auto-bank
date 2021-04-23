@@ -2,26 +2,31 @@
 Support seraph via paypal donations, thanks in advance !
 ```
 
-# auto-banker [![](https://img.shields.io/badge/paypal-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush) [![](https://img.shields.io/badge/patreon-pledge-333333.svg?colorA=F96854&colorB=333333)](https://www.patreon.com/seraphinush)
-tera-toolbox module to automatically store whitelisted items from inventory to bank storage
+# auto-bank [![](https://img.shields.io/badge/paypal-donate-333333.svg?colorA=0070BA&colorB=333333)](https://www.paypal.me/seraphinush) [![](https://img.shields.io/badge/patreon-pledge-333333.svg?colorA=F96854&colorB=333333)](https://www.patreon.com/seraphinush)
+tera-toolbox module to automatically store gold and whitelisted items from inventory to bank storage
 
 ## Auto-update guide
-- Create a folder called `auto-banker` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/seraphinush-gaming/auto-banker/master/module.json) << (right-click this link and save as..) into the folder
+- Create a folder called `auto-bank` in `tera-toolbox/mods` and download >> [`module.json`](https://raw.githubusercontent.com/seraphinush-gaming/auto-bank/master/module.json) << (right-click this link and save as..) into the folder
 
 ## Usage
-- __`bank`__
+- `bank`
   - Toggle on/off
 ### Arguments
-- __`add <bank tab> <chatLink | id>`__
+- `add <bank tab> <chatLink | id>`
   - Add item to user designated `bank tab` of bank list
-- __`set`__
-  - __`delay <num>`__
-    - Set delay between items banked to `num` ms
-- __`list`__
+- `gold`
+  - Toggle Gold auto-deposit on/off
+- `list`
   - Export bank list to console
-- __`rm <chatLink | id>`__
+- `rm <chatLink | id>`
   - Remove item from bank list
-- __`usage`__
+- `set`
+  - `delay <num>`
+    - Set delay between items banked to `num` ms
+  - `gold <num>`
+    - Set auto-deposit to keep `num` Gold in Inventory
+    - Requires auto-deposit to `true`
+- `usage`
   - Send command and arguments to chat
 
 ## Info
@@ -32,6 +37,8 @@ tera-toolbox module to automatically store whitelisted items from inventory to b
 ## Changelog
 <details>
 
+    1.02
+    - Added `gold` option
     1.01
     - Added `usage` option
     1.00

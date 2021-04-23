@@ -22,18 +22,27 @@ class auto_banker {
       'add': async (tab, id) => {
         if (tab && id) {
           (!isNaN(tab = parseInt(tab)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlink_id(id);
+          if (!mod.game.data.items.get(id))
+            return this.send(`Invalid id. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
           mod.settings.bank_list[tab].push(id);
-          this.send(`Added &lt;${mod.game.data.items.get(id).name}&gt; to bank tab ${tab}.`);
+          let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
+          this.send(`Added &lt;${name}&gt; to bank tab ${tab}.`);
         }
-        else this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`)
+        else this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
+      },
+      'gold': () => {
+        mod.settings.deposit_gold = !mod.settings.deposit_gold;
+        this.send(`Auto-deposit Gold ${mod.settings.deposit_gold ? 'En' : 'Dis'}abled`);
       },
       'list': () => {
         mod.log('Bank list :');
         for (let tab in mod.settings.bank_list) {
           console.log(`${tab}.`);
           mod.settings.bank_list[tab].sort((a, b) => parseInt(a) - parseInt(b));
+          mod.settings.bank_list[tab] = Array.from(new Set(mod.settings.bank_list[tab]));
           mod.settings.bank_list[tab].forEach((item) => {
-            console.log('- ' + item + ' : ' + (mod.game.data.items.get(item) ? mod.game.data.items.get(item).name : 'undefined'));
+            let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
+            console.log('- ' + item + ' : ' + name);
           });
         }
         this.send(`Exported bank list to console.`);
@@ -46,9 +55,10 @@ class auto_banker {
             i = mod.settings.bank_list[tab].indexOf(id);
             i >= 0 ? mod.settings.bank_list[tab].splice(i, 1) : null;
           }
-          this.send(`Removed &lt;${mod.game.data.items.get(id).name}&gt; from bank list.`);
+          let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
+          this.send(`Removed &lt;${name}&gt; from bank list.`);
         }
-        else this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`)
+        else this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`);
       },
       'set': {
         'delay': (num) => {
@@ -56,12 +66,19 @@ class auto_banker {
             mod.settings.delay = num;
             this.send(`Set delay between items banked to ${num} ms.`);
           }
-          else { this.send(`Invalid argument. usage : bank set delay <num>`); }
+          else { this.send(`Invalid argument. usage : bank set delay &lt;num&gt;`); }
         },
-        '$default': () => this.send(`Invalid argument. usage : bank set [delay]`)
+        'gold': (num) => {
+          if (!isNaN(num = parseInt(num))) {
+            mod.settings.deposit_amount = num * 10000;
+            this.send(`Set auto-deposit to keep ${num} Gold in Inventory.`);
+          }
+          else this.send(`Invalid argument. usage : bank set gold &lt;num&gt;`);
+        },
+        '$default': () => this.send(`Invalid argument. usage : bank set [delay|gold]`)
       },
-      'usage': () => this.send(`Usage : bank [add|list|rm|set]`),
-      '$default': () => this.send(`Invalid argument. usage : bank [add|list|rm|set|usage]`)
+      'usage': () => this.send(`Usage : bank [add|gold|list|rm|set]`),
+      '$default': () => this.send(`Invalid argument. usage : bank [add|gold|list|rm|set|usage]`)
     });
 
     // inventory
@@ -71,10 +88,12 @@ class auto_banker {
     // code
     mod.hook('S_REQUEST_CONTRACT', 1, { order: 10 }, (e) => {
       if (mod.settings.enable && e.senderId == mod.game.me.gameId && e.type == 26) {
-        mod.hookOnce('S_VIEW_WARE_EX', mod.majorPatchVersion >= 96 ? 3 : 2, { order: -10 }, (e) => {
+        mod.hookOnce('S_VIEW_WARE_EX', mod.majorPatchVersion >= 96 ? 3 : 2, { order: -10 }, async (e) => {
           if (!this.do_bank && e.gameId == mod.game.me.gameId && e.container == 1) {
             this.do_bank = true;
-            this.handle_bank();
+            await this.handle_bank();
+            if (mod.settings.deposit_gold)
+              this.handle_deposit();
           }
         });
       }
@@ -85,7 +104,7 @@ class auto_banker {
   destructor() {
     this.command.remove('bank');
     for (let tab in this.mod.settings.bank_list) {
-      this.mod.settings.bank_list[tab].sort();
+      mod.settings.bank_list[tab].sort((a, b) => parseInt(a) - parseInt(b));
       this.mod.settings.bank_list[tab] = Array.from(new Set(this.mod.settings.bank_list[tab]));
     }
 
@@ -121,13 +140,28 @@ class auto_banker {
 
         for (let item of this.to_bank[tab])
           await this.try_bank(tab, item);
-          
+
         await this.sleep(100);
       }
     }
 
     this.to_bank = {};
     this.do_bank = false;
+  }
+
+  async handle_deposit() {
+    if (this.mod.game.inventory.money > this.mod.settings.deposit_amount) {
+      this.mod.send('C_PUT_WARE_ITEM', 3, {
+        gameId: this.mod.game.me.gameId,
+        container: 1,
+        money: this.mod.game.inventory.money - BigInt(this.mod.settings.deposit_amount),
+        fromPocket: -1,
+        fromSlot: -1,
+        id: -1,
+        toSlot: -1
+      });
+    }
+
   }
 
   // helper
