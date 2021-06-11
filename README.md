@@ -24,8 +24,8 @@ tera-toolbox module to automatically store gold and whitelisted items from inven
   - `delay <num>`
     - Set delay between items banked to `num` ms
   - `gold <num>`
-    - Set auto-deposit to keep `num` Gold in Inventory
-    - Requires auto-deposit to `true`
+    - Set Gold auto-deposit to keep `num` Gold in Inventory
+    - Requires Gold auto-deposit to be set to `true`
 - `?`
   - Send command and arguments to chat
 

@@ -1,11 +1,11 @@
 'use strict';
 
 const DefaultSettings = {
-  "enable": false,
+  "enabled": false,
   "delay": 150,
-  "bank_list": { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] },
-  "deposit_gold": false,
-  "deposit_amount": 0
+  "bankList": { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [] },
+  "depositGold": false,
+  "depositAmount": 0
 };
 
 function MigrateSettings(from_ver, to_ver, settings) {
@@ -28,6 +28,16 @@ function MigrateSettings(from_ver, to_ver, settings) {
       case 3:
         settings.deposit_gold = false;
         settings.deposit_amount = 0;
+        break;
+      case 4:
+        settings.enabled = settings.enable;
+        delete settings.enable;
+        settings.bankList = settings.bank_list;
+        delete settings.bank_list;
+        settings.depositGold = settings.deposit_gold;
+        delete settings.deposit_gold;
+        settings.depositAmount = settings.deposit_amount;
+        delete settings.deposit_amount;
         break;
     }
 
