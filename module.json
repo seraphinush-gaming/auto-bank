@@ -1,6 +1,6 @@
 {
   "author": "seraphinush",
-  "conflict": ["auto-bank","auto-banker"],
+  "conflicts": ["auto-bank","auto-banker"],
   "description": "tera-toolbox module to automatically store gold and whitelisted items from inventory to bank storage",
   "disableAutoUpdate": false,
   "donationUrl": "https://www.paypal.me/seraphinush",
@@ -13,5 +13,5 @@
   },
   "servers": ["https://raw.githubusercontent.com/seraphinush-gaming/auto-bank/master/"],
   "supportUrl": "https://github.com/seraphinush-gaming/auto-bank/blob/master/README.md",
-  "version": "1.03.04.v107.02"
+  "version": "1.03.05.v107.02"
 }
