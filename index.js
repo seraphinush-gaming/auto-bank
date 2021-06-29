@@ -24,12 +24,14 @@ class AutoBank {
           return this.send(`Invalid argument. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
 
         (!isNaN(tab = parseInt(tab)) && !isNaN(id)) ? id = parseInt(id) : id = await this.get_chatlinkId(id);
-        if (!mod.game.data.items.get(id))
+        let item = mod.game.data.items.get(id)
+        if (!item)
           return this.send(`Invalid id. usage : bank add &lt;tab&gt; &lt;item id | chat link&gt;`);
 
         mod.settings.bankList[tab].push(id);
-        let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
-        this.send(`Added &lt;${name}&gt; to bank tab ${tab}.`);
+        mod.settings.bankList[tab] = Array.from(new Set(mod.settings.bankList[tab]));
+        mod.settings.bankList[tab].sort((a, b) => parseInt(a) - parseInt(b));
+        this.send(`Added &lt;${item.name}&gt; to bank tab ${tab}.`);
       },
       'gold': () => {
         mod.settings.depositGold = !mod.settings.depositGold;
@@ -39,11 +41,9 @@ class AutoBank {
         mod.log('Bank list :');
         for (let tab in mod.settings.bankList) {
           console.log(`${tab}.`);
-          mod.settings.bankList[tab].sort((a, b) => parseInt(a) - parseInt(b));
-          mod.settings.bankList[tab] = Array.from(new Set(mod.settings.bankList[tab]));
-          mod.settings.bankList[tab].forEach((item) => {
+          mod.settings.bankList[tab].forEach((id) => {
             let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
-            console.log('- ' + item + ' : ' + name);
+            console.log('- ' + id + ' : ' + name);
           });
         }
         this.send(`Exported bank list to console.`);
@@ -53,10 +53,9 @@ class AutoBank {
           return this.send(`Invalid argument. usage : bank rm &lt;item id | chat link&gt;`);
 
         (!isNaN(parseInt(id))) ? id = parseInt(id) : id = await this.get_chatlinkId(id);
-        let i = -1;
         for (let tab in mod.settings.bankList) {
-          i = mod.settings.bankList[tab].indexOf(id);
-          i >= 0 ? mod.settings.bankList[tab].splice(i, 1) : null;
+          const i = mod.settings.bankList[tab].indexOf(id);
+          if (i >= 0) mod.settings.bankList[tab].splice(i, 1);
         }
         let name = mod.game.data.items.get(id) ? mod.game.data.items.get(id).name : 'undefined';
         this.send(`Removed &lt;${name}&gt; from bank list.`);
@@ -105,12 +104,15 @@ class AutoBank {
   destructor() {
     this.command.remove('bank');
     for (let tab in this.mod.settings.bankList) {
-      this.mod.settings.bankList[tab].sort((a, b) => parseInt(a) - parseInt(b));
       this.mod.settings.bankList[tab] = Array.from(new Set(this.mod.settings.bankList[tab]));
+      this.mod.settings.bankList[tab].sort((a, b) => parseInt(a) - parseInt(b));
     }
 
     if (this.mod.manager.isLoaded('tera-game-state'))
       this.mod.game.inventory.removeListener('update', this._listener);
+    
+    this.command = undefined;
+    this.mod = undefined;
   }
 
   // listener
@@ -150,7 +152,7 @@ class AutoBank {
     this.isBanking = false;
   }
 
-  async handleDeposit() {
+  handleDeposit() {
     if (this.mod.game.inventory.money > this.mod.settings.depositAmount) {
       this.mod.send('C_PUT_WARE_ITEM', 3, {
         gameId: this.mod.game.me.gameId,

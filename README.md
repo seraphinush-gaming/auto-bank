@@ -10,16 +10,19 @@ tera-toolbox module to automatically store gold and whitelisted items from inven
 
 ## Usage
 - `bank`
-  - Toggle on/off
+  - Toggle
+
 ### Arguments
 - `add <bank tab> <chatLink | id>`
-  - Add item to user designated `bank tab` of bank list
+  - Add item to auto-bank to `bank tab`
+  - eg. `bank add 1 <Essential Mana>`
 - `gold`
-  - Toggle Gold auto-deposit on/off
+  - Toggle auto-deposit Gold
 - `list`
   - Export bank list to console
 - `rm <chatLink | id>`
   - Remove item from bank list
+  - eg. `bank rm <Essential Mana>`
 - `set`
   - `delay <num>`
     - Set delay between items banked to `num` ms
