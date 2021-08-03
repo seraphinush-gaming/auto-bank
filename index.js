@@ -83,10 +83,10 @@ class AutoBank {
 
     // inventory
     mod.game.initialize('inventory');
-    mod.game.inventory.on('update', this._listener.bind(this));
+    mod.game.inventory.on('update', this.onInventoryUpdate.bind(this));
 
     // code
-    mod.hook('S_REQUEST_CONTRACT', 1, { order: 10 }, (e) => {
+    mod.hook('S_REQUEST_CONTRACT', mod.majorPatchVersion >= 108 ? 2 : 1, (e) => {
       if (mod.settings.enabled && e.senderId == mod.game.me.gameId && e.type == 26) {
         mod.hookOnce('S_VIEW_WARE_EX', mod.majorPatchVersion >= 96 ? 3 : 2, { order: -10 }, async (e) => {
           if (!this.isBanking && e.gameId == mod.game.me.gameId && e.container == 1) {
@@ -109,14 +109,14 @@ class AutoBank {
     }
 
     if (this.mod.manager.isLoaded('tera-game-state'))
-      this.mod.game.inventory.removeListener('update', this._listener);
+      this.mod.game.inventory.removeListener('update', this.onInventoryUpdate);
     
     this.command = undefined;
     this.mod = undefined;
   }
 
   // listener
-  _listener() {
+  onInventoryUpdate() {
     if (!this.isBanking) {
       this.toBank = {};
 
